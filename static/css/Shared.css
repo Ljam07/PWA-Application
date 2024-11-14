@@ -1,5 +1,5 @@
 body {
-    display: flex;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -7,5 +7,6 @@ body {
 
     background-color: burlywood;
 
-    font-size: 200px;
+    font-size: 200%;
+    width: 800px;
   }
