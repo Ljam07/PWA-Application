@@ -1,13 +1,19 @@
-from DBApi import *
+from DBApi import DataBase
 
 ############ Main logic ###############
 
 # Connect to db
-conn = DBConnect("src/DB/users.db")
+user = DataBase("src/DB/users.db")
 
 # Execute instruction
-DBExecute(conn, "CREATE TABLE users (email TEXT, username TEXT\
-, first TEXT, last TEXT, password TEXT, permissions TINYINT)")
+user.DBExecute("CREATE TABLE users (email TEXT, username TEXT\
+, first TEXT, last TEXT, password CHAR, permissions TINYINT)")
 
 #Close db
-DBClose(conn)
+user.DBClose()
+
+
+### Same thing but for games database
+games = DataBase("src/DB/games.db")
+games.DBExecute("CREATE TABLE games (title TEXT, year int, rating INT)")
+games.DBClose()
