@@ -3,10 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/Shared.css">
+    <link rel="stylesheet" href="../static/css/Signup.css">
     <title>Signup</title>
 </head>
 <body>
-    <h1>Signup</h1>
+    <div class="container">
+        <h1>Signup</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/signup" method="post">
+            <label for="email">E-mail</label>
+            <input type="text" name="email" id="email" required>
+
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" id="firstname" required>
+
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastname" id="lastname" required>
+
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password" required>
+
+            <input type="submit" value="Add User">
+        </form>
+    </div>
 </body>
 </html>

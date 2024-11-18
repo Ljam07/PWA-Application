@@ -14,27 +14,34 @@ def Login():
     # Figure out later on
     return render_template("login.html")
 
-@app.route("/signup")
+@app.route("/signup", methods=("GET", "POST"))
 def Signup():
     if request.method == "POST":
+            email = request.form['email']
+            username = request.form['username']
             firstname = request.form['firstname']
             lastname = request.form['lastname']
-            dob = request.form['dob']
+            password = request.form['password']
 
-            db = sqlite3.connect("database/student_marks.db")
+            db = sqlite3.connect("database/users.db")
             cursor = db.cursor()
 
-            cursor.execute("SELECT * FROM Students WHERE firstname = ? AND lastname = ? AND dob = ?", 
-                           (firstname, lastname, dob))
-            existing_student = cursor.fetchone()
+            cursor.execute("SELECT * FROM Users WHERE email = ? AND username = ?", 
+                           (email, username))
+            existing_user = cursor.fetchone()
 
-            if existing_student:
-                flash(f"Student {firstname} {lastname} with DOB {dob} already exists.")
+            if existing_user:
+                if existing_user[0]:
+                    flash(f"Email already in use.")
+                if existing_user[1]:
+                    flash(f"Username already in use.")
             else:
-                cursor.execute("INSERT INTO Students('firstname', 'lastname', 'dob') VALUES (?, ?, ?)", 
-                               (firstname, lastname, dob))
+                cursor.execute("INSERT INTO Users('email', 'username', 'firstname', \
+'lastname', 'password', 'permission') VALUES (?, ?, ?, ?, ?, ?)", 
+                               (email, username, firstname, lastname, password, 2))
                 db.commit()
-                flash(f"Student {firstname} {lastname} added successfully.")
+                flash(f"User {firstname} {lastname} added successfully.")
+                print(f"User {firstname} {lastname} added successfully.")
 
             db.close()
 
