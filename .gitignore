@@ -1,6 +1,8 @@
 # Debating whether or not to keep db
 *.db
 
+.vscode
+
 
 ## Courtesy to github python gitignore template
 ## https://github.com/github/gitignore/blob/main/Python.gitignore

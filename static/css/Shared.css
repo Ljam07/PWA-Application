@@ -1,4 +1,4 @@
-body {
+/*body {
     display: inline-block;
     justify-content: center;
     align-items: center;
@@ -10,3 +10,16 @@ body {
     font-size: 200%;
     width: 800px;
   }
+    */
+
+  body {
+    background-color: rgb(70, 80, 110);
+    height: 100vh; /* Take up full viewport height */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    /*align-items: center; /* Center vertically */
+    padding-top: 30vh;
+    text-align: center; /* Center text */
+    margin: 0; /* Remove default margin */
+    font-family: Arial, sans-serif; /* Optional, for better font */
+}
