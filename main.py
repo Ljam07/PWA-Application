@@ -5,13 +5,39 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex
 
+username = None
+isSignedIn = False
+
 @app.route("/")
 def Home():
     return render_template("index.html")
 
-@app.route("/login")
+@app.route("/login", methods=("GET", "POST"))
 def Login():
+    global isSignedIn, username
     # Figure out later on
+    if request.method == "POST":
+            print("Completed this part")
+            email = request.form['email']
+            password = request.form['password']
+
+
+            db = sqlite3.connect("database/users.db")
+            cursor = db.cursor()
+
+            cursor.execute("SELECT * FROM Users WHERE email = ? AND password = ?", 
+                           (email, password))
+            existing_user = cursor.fetchone()
+
+            if not existing_user:
+                flash("Email or password does not exist.")
+            else:
+                isSignedIn = True
+                username = existing_user[1]
+                flash("Found user!")
+
+            db.close()
+
     return render_template("login.html")
 
 @app.route("/signup", methods=("GET", "POST"))

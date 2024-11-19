@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Signup.css">
+    <link rel="stylesheet" href="../static/css/Shared.css">
     <title>Signup</title>
 </head>
 <body>
@@ -20,6 +21,18 @@
             {% endif %}
         {% endwith %}
 
+        <script>
+        function ShowPassword() 
+        {
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+            x.type = "text";
+          } else {
+            x.type = "password";
+          }
+        }
+        </script>
+
         <form action="/signup" method="post">
             <label for="email">E-mail</label>
             <input type="text" name="email" id="email" required>
@@ -34,9 +47,14 @@
             <input type="text" name="lastname" id="lastname" required>
 
             <label for="password">Password</label>
-            <input type="text" name="password" id="password" required>
+            <input type="password" name="password" id="password" required><br>
 
-            <input type="submit" value="Add User">
+            <div class="show-password-container">
+                <input type="checkbox" id="show-password" onclick="ShowPassword()">
+                <label for="show-password">Show Password</label>
+            </div>            
+            
+            <input type="submit" value="Signup">
         </form>
     </div>
 </body>

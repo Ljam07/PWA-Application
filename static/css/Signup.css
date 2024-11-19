@@ -1,79 +1,108 @@
-body {
-    background-color: rgb(70, 80, 110);
-    height: 100vh;
+.container {
+  background-color: rgb(50, 60, 90);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+  text-align: center; /* Centre content inside the container */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: left; /* Align labels to the left */
+}
+
+form input[type="text"], form input[type="password"], form input[type="submit"] {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 4px;
+}
+
+form input[type="text"], form input[type="password"] {
+  background-color: rgb(60, 70, 100);
+  color: white;
+  border: 1px solid rgb(80, 90, 120);
+  box-sizing: border-box;
+}
+
+form input[type="text"], form input[type="password"]:focus {
+  outline: none;
+  border-color: rgb(130, 140, 180);
+}
+
+form input[type="submit"] {
+  background-color: rgb(90, 110, 160);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+form input[type="submit"]:hover {
+  background-color: rgb(110, 130, 180);
+}
+
+ul {
+  padding: 0;
+  margin: 1rem 0;
+  list-style: none;
+  background-color: rgb(60, 70, 100);
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: left; /* Align messages to the left */
+}
+
+ul li {
+  color: rgb(200, 220, 255);
+}
+  
+/* Style for the Show Password checkbox */
+.show-password-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: white;
-  }
-  
-  .container {
-    background-color: rgb(50, 60, 90);
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 400px;
-    text-align: center; /* Centre content inside the container */
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  form label {
-    display: block;
     margin-top: 1rem;
-    font-weight: bold;
-    text-align: left; /* Align labels to the left */
-  }
-  
-  form input[type="text"], form input[type="submit"] {
-    width: 100%;
-    padding: 0.8rem;
-    margin-top: 0.5rem;
-    border: none;
+}
+
+.show-password-container input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.2); /* Make the checkbox slightly larger */
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgb(80, 90, 120);
     border-radius: 4px;
-  }
-  
-  form input[type="text"] {
     background-color: rgb(60, 70, 100);
-    color: white;
-    border: 1px solid rgb(80, 90, 120);
-    box-sizing: border-box;
-  }
-  
-  form input[type="text"]:focus {
-    outline: none;
-    border-color: rgb(130, 140, 180);
-  }
-  
-  form input[type="submit"] {
-    background-color: rgb(90, 110, 160);
-    color: white;
-    font-weight: bold;
     cursor: pointer;
-    margin-top: 1rem;
-  }
-  
-  form input[type="submit"]:hover {
-    background-color: rgb(110, 130, 180);
-  }
-  
-  ul {
-    padding: 0;
-    margin: 1rem 0;
-    list-style: none;
-    background-color: rgb(60, 70, 100);
-    border-radius: 4px;
-    padding: 1rem;
-    text-align: left; /* Align messages to the left */
-  }
-  
-  ul li {
-    color: rgb(200, 220, 255);
-  }
-  
+    position: relative;
+}
+
+.show-password-container input[type="checkbox"]:checked {
+    background-color: rgb(90, 110, 160);
+    border-color: rgb(130, 140, 180);
+}
+
+.show-password-container input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.show-password-container label {
+    font-weight: normal;
+    color: white;
+    cursor: pointer;
+}
