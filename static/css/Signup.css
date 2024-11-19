@@ -40,18 +40,6 @@ form input[type="text"], form input[type="password"]:focus {
   border-color: rgb(130, 140, 180);
 }
 
-form input[type="submit"] {
-  background-color: rgb(90, 110, 160);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-form input[type="submit"]:hover {
-  background-color: rgb(110, 130, 180);
-}
-
 ul {
   padding: 0;
   margin: 1rem 0;

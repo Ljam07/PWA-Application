@@ -13,3 +13,10 @@ INSERT INTO Users (email, username, firstname, lastname, password, permission)
 VALUES
     ('admin@xyz', 'admin', 'admin', 'istrator', 'adminpw', 1),
     ('john.doe@example.com', 'johndoe', 'John', 'Doe', 'securepassword123', 2);
+
+CREATE TABLE IF NOT EXISTS Games (
+    game_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT,
+    image_path TEXT,
+    rating REAL)

@@ -12,12 +12,18 @@ isSignedIn = False
 def Home():
     return render_template("index.html")
 
+@app.route("/logout")
+def Logout():
+    global isSignedIn
+    isSignedIn = False
+    flash("You have been logged out.")
+    return Home()
+
 @app.route("/login", methods=("GET", "POST"))
 def Login():
     global isSignedIn, username
     # Figure out later on
     if request.method == "POST":
-            print("Completed this part")
             email = request.form['email']
             password = request.form['password']
 
@@ -72,5 +78,23 @@ def Signup():
             db.close()
 
     return render_template("signup.html")
+
+@app.route("/rating", methods=("GET", "POST"))
+def Rating():
+    db = sqlite3.connect("database/games.db")
+    cursor = db.cursor()
+
+    if request.method == "POST":
+        game_id = request.form['game_id']
+        rating = float(request.form['rating'])
+        cursor.execute("UPDATE Games SET rating = ? WHERE game_id = ?", (rating, game_id))
+        db.commit()
+        flash("Rating submitted successfully.")
+
+    cursor.execute("SELECT * FROM Games")
+    games = cursor.fetchall()
+    db.close()
+    return render_template("rating.html", games=games)
+
 
 app.run(debug=True, port=5000)

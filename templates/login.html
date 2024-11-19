@@ -8,8 +8,27 @@
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Game Review</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                {% if isSignedIn %}
+                    <a href="/logout">Logout</a>
+                    <a href="/rating">Rate Games</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/signup">Signup</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="container">     
+
         <h1>Login</h1>
+        
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}

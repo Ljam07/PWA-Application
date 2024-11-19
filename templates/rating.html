@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Shared.css">
-    <title>Rate Games</title>
+    <link rel="stylesheet" href="../static/css/Rating.css">
+    <title>Ratings</title>
 </head>
 <body>
-    <h1>Rate Games</h1>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Game Review</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                {% if isSignedIn %}
+                    <a href="/logout">Logout</a>
+                    <a href="/rating">Rate Games</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/signup">Signup</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="container">
+        <h1>Rate Games</h1>
+        <div class="games-grid">
+            {% for game in games %}
+            <div class="game-card">
+                <img src="{{ url_for('static', filename='images/' + game[3]) }}" alt="{{ game[1] }}">
+                <h2>{{ game[1] }}</h2>
+                <p>{{ game[2] }}</p>
+                <div class="rating-display">
+                    <strong>Average Rating:</strong> {{ game[4] if game[4] else "Not rated yet" }}
+                </div>
+                <form action="/rating" method="post">
+                    <input type="hidden" name="game_id" value="{{ game[0] }}">
+                    <label for="rating">Your Rating:</label>
+                    <input type="number" name="rating" min="0" max="5" step="0.1" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
 </body>
 </html>
