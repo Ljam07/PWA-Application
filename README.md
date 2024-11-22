@@ -24,7 +24,7 @@ This is a simple Flask application that allows users to rate games. The applicat
 2. Create a virtual environment and activate it:
     ```bash
     python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    .venv\Scripts\activate.bat  # On Mac, use `source .venv/bin/activate`
     ```
 
 3. Install the required packages:
