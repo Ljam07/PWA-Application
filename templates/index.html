@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Shared.css">
-    <title>Review Application</title>
+    <title>Game Review - Home</title>
 </head>
 <body>
     <nav>
@@ -23,6 +23,19 @@
         </div>
     </nav>
     
-    <h1>Index Site</h1>
+    <main>
+        <div class="hero-section">
+            <h1>Welcome to Game Review!</h1>
+            <p>Your go-to platform for honest game reviews and ratings.</p>
+            <div class="cta-buttons">
+                {% if not isSignedIn %}
+                    <a href="/signup" class="cta-btn">Sign Up</a>
+                    <a href="/login" class="cta-btn">Log In</a>
+                {% else %}
+                    <a href="/rating" class="cta-btn">Rate Games</a>
+                {% endif %}
+            </div>
+        </div>
+    </main>
 </body>
 </html>

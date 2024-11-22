@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Shared.css">
-    <link rel="stylesheet" href="../static/css/Rating.css">
-    <title>Ratings</title>
+    <title>{{title}}</title>
 </head>
 <body>
     <nav>
@@ -23,19 +22,5 @@
             </div>
         </div>
     </nav>
-
-    <div class="rating-container">
-        <div class="games-grid">
-            {% for game in games %}
-                <!-- Wrap the entire card in a link to make it clickable -->
-                <a href="/rating/{{ game[0] }}" class="game-card">
-                    <img src="../static/images/{{ game[3] }}" alt="{{ game[1] }}">
-                    <h2>{{ game[1] }}</h2>
-                    <p>{{ game[2] }}</p>
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-        
 </body>
 </html>

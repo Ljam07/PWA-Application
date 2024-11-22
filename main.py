@@ -82,20 +82,51 @@ def Signup():
 
 @app.route("/rating", methods=("GET", "POST"))
 def Rating():
+    if not isSignedIn:
+        flash("You must login to use the rating system.")
+        return Login()
+
     db = sqlite3.connect("database/games.db")
     cursor = db.cursor()
 
-    if request.method == "POST":
-        game_id = request.form['game_id']
-        rating = float(request.form['rating'])
-        cursor.execute("UPDATE Games SET rating = ? WHERE game_id = ?", (rating, game_id))
-        db.commit()
-        flash("Rating submitted successfully.")
 
     cursor.execute("SELECT * FROM Games")
     games = cursor.fetchall()
+    for game in games:
+        print(f"{game[1]}")
     db.close()
     return render_template("rating.html", games=games, isSignedIn=isSignedIn)
+
+@app.route("/rating/<game_id>", methods=("GET", "POST"))
+def RatingSelect(game_id):
+    if not isSignedIn:
+        flash("You must login to use the rating system.")
+        return Login()
+    
+    db = sqlite3.connect("database/games.db")
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM Games WHERE game_id = ?", game_id)
+    data = cursor.fetchone()
+
+    if data == None:
+        flash("No game could be found.")
+        return Rating()
+    
+    title = data[1]
+
+    #This needs to be replaced
+    """
+    if request.method == "POST":
+            game_id = request.form['game_id']
+            rating = float(request.form['rating'])
+            cursor.execute("UPDATE Games SET rating = ? WHERE game_id = ?", (rating, game_id))
+            db.commit()
+            flash("Rating submitted successfully.")
+    """
+
+    db.close()
+    return render_template("rating_select.html", title=title)
 
 
 app.run(debug=True, port=5000)

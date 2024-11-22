@@ -7,6 +7,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: white;
+  overflow: hidden; /* Prevents overflow */
 }
 
 form input[type="submit"] {
@@ -64,4 +65,52 @@ nav {
 .nav-links a:hover {
   background-color: rgb(90, 110, 160);
   color: rgb(200, 220, 255);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+/* Styling for CTA Buttons */
+.cta-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, rgb(100, 120, 180), rgb(80, 100, 160));
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  border-radius: 50px; /* Rounded button edges */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: linear-gradient(135deg, rgb(120, 150, 200), rgb(100, 120, 180));
+  transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+.cta-btn:active {
+  transform: translateY(0); /* Returns to original position when clicked */
+}
+
+/* Footer */
+footer {
+  background-color: rgb(50, 60, 90);
+  text-align: center;
+  padding: 10px 0;
 }
