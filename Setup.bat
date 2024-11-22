@@ -20,12 +20,4 @@ if /i "%checkFlask%"=="y" (
     echo Skipping Flask check.
 )
 
-REM Prompt user to run the CreateTable.py script
-set /p runScript="Do you want to run database setup? (y/n): "
-if /i "%runScript%"=="y" (
-    python ./backend/Scripts/CreateTable.py
-) else (
-    echo Skipping CreateTable.py execution.
-)
-
 pause
