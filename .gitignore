@@ -3,6 +3,7 @@
 
 .vscode
 
+.VSCodeCounter/
 
 ## Courtesy to github python gitignore template
 ## https://github.com/github/gitignore/blob/main/Python.gitignore
@@ -40,6 +41,8 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+All.txt
+all2.txt
 
 # Installer logs
 pip-log.txt

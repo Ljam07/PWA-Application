@@ -7,6 +7,22 @@
     <title>Review Application</title>
 </head>
 <body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Game Review</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                {% if isSignedIn %}
+                    <a href="/logout">Logout</a>
+                    <a href="/rating">Rate Games</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/signup">Signup</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
     <h1>Index Site</h1>
 </body>
 </html>

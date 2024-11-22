@@ -10,14 +10,15 @@ isSignedIn = False
 
 @app.route("/")
 def Home():
-    return render_template("index.html")
+    return render_template("index.html", isSignedIn=isSignedIn)
 
 @app.route("/logout")
 def Logout():
-    global isSignedIn
+    global isSignedIn, username
     isSignedIn = False
+    username = None
     flash("You have been logged out.")
-    return Home()
+    return Login()
 
 @app.route("/login", methods=("GET", "POST"))
 def Login():
@@ -44,7 +45,7 @@ def Login():
 
             db.close()
 
-    return render_template("login.html")
+    return render_template("login.html", isSignedIn=isSignedIn)
 
 @app.route("/signup", methods=("GET", "POST"))
 def Signup():
@@ -77,7 +78,7 @@ def Signup():
 
             db.close()
 
-    return render_template("signup.html")
+    return render_template("signup.html", isSignedIn=isSignedIn)
 
 @app.route("/rating", methods=("GET", "POST"))
 def Rating():
@@ -94,7 +95,7 @@ def Rating():
     cursor.execute("SELECT * FROM Games")
     games = cursor.fetchall()
     db.close()
-    return render_template("rating.html", games=games)
+    return render_template("rating.html", games=games, isSignedIn=isSignedIn)
 
 
 app.run(debug=True, port=5000)
