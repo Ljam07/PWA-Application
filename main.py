@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect
 import uuid
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex
@@ -18,7 +19,7 @@ def Logout():
     g_isSignedIn = False
     g_username = None
     flash("You have been logged out.")
-    return Login()
+    return redirect("/login")
 
 @app.route("/login", methods=("GET", "POST"))
 def Login():
@@ -43,7 +44,7 @@ def Login():
                 g_username = existing_user[1]
                 flash("Found user!")
                 db.close()
-                return Home()
+                return redirect("/")
 
             db.close()
 
@@ -84,7 +85,7 @@ def Signup():
                 db.close()
                 g_isSignedIn = True
                 g_username = username
-                return Home()
+                return redirect("/")
 
 
             db.close()
@@ -95,7 +96,7 @@ def Signup():
 def Rating():
     if not g_isSignedIn:
         flash("You must login to use the rating system.")
-        return Login()
+        return redirect("/login")
 
     db = sqlite3.connect("database/games.db")
     cursor = db.cursor()
@@ -109,7 +110,7 @@ def Rating():
 def RatingSelect(game_id):
     if not g_isSignedIn:
         flash("You must login to use the rating system.")
-        return Login()
+        return redirect("/login")
     
     db = sqlite3.connect("database/games.db")
     cursor = db.cursor()
@@ -119,7 +120,7 @@ def RatingSelect(game_id):
 
     if game_data == None:
         flash("No game could be found.")
-        return Rating()
+        return redirect("/rating")
     
     cursor.execute("SELECT * FROM Reviews WHERE game_id = ?", game_id)
     review_data = cursor.fetchall()
@@ -131,23 +132,48 @@ def RatingSelect(game_id):
             sum_rating += rows[4]
             rating_count += 1
 
-        average_rating = sum_rating / rating_count
+        average_rating = round(sum_rating / rating_count, 1)
     else:
         average_rating = 0
 
-    #This needs to be replaced
-    """
+    # To make sure there isnt already a review
+    cursor.execute("SELECT * FROM Reviews WHERE game_id = ? AND reviewer_name = ?", (game_id, g_username))
+    existing_review = cursor.fetchone()
+
+    hasReviewed = False
+    if not existing_review == None:
+        hasReviewed = True
+
+
     if request.method == "POST":
-            game_id = request.form['game_id']
-            rating = float(request.form['rating'])
-            cursor.execute("UPDATE Games SET rating = ? WHERE game_id = ?", (rating, game_id))
+        if "remove_review" in request.form:
+            # Remove the user's review
+            cursor.execute(
+                "DELETE FROM Reviews WHERE game_id = ? AND reviewer_name = ?", 
+                (game_id, g_username)
+            )
             db.commit()
-            flash("Rating submitted successfully.")
-    """
+            # flash("Your review has been removed.")
+            return redirect(f"/rating/{game_id}")
+        
+        elif "add_review" in request.form:
+            # Add a new review
+            rating = int(request.form["rating"])
+            review_text = request.form["review_text"]
+            review_date = datetime.now().strftime("%Y-%m-%d")
+
+            cursor.execute(
+                "INSERT INTO Reviews (game_id, reviewer_name, review_date, rating, review_text) VALUES (?, ?, ?, ?, ?)",
+                (game_id, g_username, review_date, rating, review_text)
+            )
+            db.commit()
+            # flash("Your review has been added.")
+            return redirect(f"/rating/{game_id}")
+
 
     db.close()
     return render_template("rating_select.html", game_data=game_data, isSignedIn=g_isSignedIn, 
-                           review_data=review_data, average_rating=average_rating)
+                           review_data=review_data, average_rating=average_rating, hasReviewed=hasReviewed)
 
 
 app.run(debug=True, port=5000)

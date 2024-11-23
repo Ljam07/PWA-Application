@@ -20,11 +20,13 @@ CREATE TABLE Reviews (
 
 INSERT INTO Games (title, description, image_path, release_date, developer, publisher)
 VALUES
-    ('GTA V', 'Online Game', 'GTA_V.png', '2013-09-17', 'Rockstar North', 'Rockstar Games');
+    ('GTA V', 'Online Game', 'GTA_V.png', '2013-09-17', 'Rockstar North', 'Rockstar Games'),
+    ('Minecraft', 'Survival Game', 'Minecraft.jpg', '2009-05-17', 'Notch', 'Mojang');
 
 INSERT INTO Reviews (game_id, reviewer_name, review_date, rating)
 VALUES
-    (1, 'test', '2024-11-21', 9);
+    (1, 'test', '2024-11-21', 9),
+    (1, 'johndoe', '2024-11-23', 10);
 
 --
 -- CREATE TABLE Reviewers (
