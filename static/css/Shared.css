@@ -1,13 +1,12 @@
 body {
-  background-color: rgb(70, 80, 110);
+  background-color: rgb(40, 50, 80);
   height: 100vh;
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  margin: 0;
+  margin: auto;
   font-family: Arial, sans-serif;
   color: white;
-  overflow: hidden; /* Prevents overflow */
 }
 
 form input[type="submit"] {
@@ -51,6 +50,7 @@ nav {
 .nav-links {
   display: flex;
   gap: 15px;
+  padding-right: 10px;
 }
 
 .nav-links a {

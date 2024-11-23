@@ -1,9 +1,17 @@
-.message-container ul {
-    background: #f4f4f4;
-    padding: 1rem;
-    list-style-type: none;
-    margin: 1rem;
-    border: 1px solid #ccc;
+/* game content */
+.game-content {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap; /* Allow content to wrap on smaller screens. Somehow screws everything up */
+  box-sizing: border-box;
+  margin-top: 2rem;
+}
+
+/* Makeshift spacing    */
+.nav-separator {
+    padding-bottom: 50px;
 }
 
 .game-container {
@@ -16,33 +24,93 @@
     background-color: rgb(50, 60, 90);
 }
 
-.game-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: rgb(236, 236, 236);
-}
-
-.release-date {
+/* Styling for the rating container */
+.rating-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* More rounded corners */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Slightly more prominent shadow */
+    background-color: rgb(50, 60, 90);
     color: #efefef;
-    font-size: 1rem;
 }
 
-.game-content {
-    display: flex;
-    gap: 2rem;
+/* Header styling for ratings */
+.rating-header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
 }
 
-.game-image {
-    width: 300px;
-    height: auto;
+/* Styling for individual reviews */
+.review {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.1); 
+    border-left: 5px solid #ff9800;
     border-radius: 5px;
 }
 
+.review h2 {
+    font-size: 1.5rem;
+    color: #ff9800; 
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.no-review h3 {
+    font-size: 1.5rem;
+    color: #aa0000;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.no-review {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 5px solid #9c1111; 
+    border-radius: 5px;
+}
+
+/* Styling for review content */
+.review p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 0.5rem;
+}
+
+
+/* Styling for the game image */
+.game-image {
+  width: 300px; /* Fixed width for image */
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+/* Styling for the game details */
 .game-details {
-    flex: 1;
+  flex: 1;
+  color: #efefef;
+  min-width: 250px; /* Ensure it doesn't get too narrow */
+  max-width: 50%; /* Limit the width of text area for better layout */
+}
+
+/* Title and description */
+.game-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: rgb(236, 236, 236);
 }
 
 .game-description {
-    margin-bottom: 1rem;
-    line-height: 1.6;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #ccc;
 }

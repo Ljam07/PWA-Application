@@ -100,11 +100,8 @@ def Rating():
     db = sqlite3.connect("database/games.db")
     cursor = db.cursor()
 
-
     cursor.execute("SELECT * FROM Games")
     games = cursor.fetchall()
-    for game in games:
-        print(f"{game[1]}")
     db.close()
     return render_template("rating.html", games=games, isSignedIn=g_isSignedIn)
 

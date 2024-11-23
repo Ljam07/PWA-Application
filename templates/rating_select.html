@@ -8,6 +8,9 @@
     <title>{{game_data[1]}}</title>
 </head>
 <body>
+    <body class="game-page">
+
+
     <nav>
         <div class="nav-container">
             <a href="/" class="nav-logo">Game Review</a>
@@ -24,6 +27,9 @@
         </div>
     </nav>
 
+    <div class="nav-separator">
+
+    </div>
     <!--
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -37,27 +43,47 @@
         {% endif %}
     {% endwith %}
         -->
-
-    <div class="game-container">
-        <div class="game-header">
-            <h1>{{ game_data[1] }}</h1>
-            <p class="game-description">{{ game_data[2] }}</p>
-        </div>
-        <div class="game-content">
-            <img src="../static/images/{{ game_data[3] }}" alt="{{ game_data[1] }}" class="game-image">
-            <div class="game-details">
-                <p class="release-date"><strong>Released on:</strong> {{ game_data[4] }}</p>
-                <p><strong>Developer:</strong> {{ game_data[5] }}</p>
-                <p><strong>Publisher:</strong> {{ game_data[6] }}</p>
-                {% if average_rating != 0 %}
-                <p><strong>Average rating:</strong> {{ average_rating }}</p>
-                {% else %}
-                <p><strong>Average rating:</strong> Unrated </p>
-                {% endif %}
+    <div class="content-container">
+        <div class="game-container">
+            <div class="game-header">
+                <h1>{{ game_data[1] }}</h1>
+                <p class="game-description">{{ game_data[2] }}</p>
+            </div>
+            <div class="game-content">
+                <img src="../static/images/{{ game_data[3] }}" alt="{{ game_data[1] }}" class="game-image">
+                <div class="game-details">
+                    <p class="release-date"><strong>Released on:</strong> {{ game_data[4] }}</p>
+                    <p><strong>Developer:</strong> {{ game_data[5] }}</p>
+                    <p><strong>Publisher:</strong> {{ game_data[6] }}</p>
+                    {% if average_rating != 0 %}
+                    <p><strong>Average rating:</strong> {{ average_rating }}</p>
+                    {% else %}
+                    <p><strong>Average rating:</strong> Unrated </p>
+                    {% endif %}
+                </div>
             </div>
         </div>
+    
+        <div class="rating-container">
+            <div class="rating-header">
+                <h1><strong>Reviews for {{game_data[1]}}</strong></h1><br>
+            </div>
+            {% if review_data %}
+                    {% for review in review_data %}
+                        {% if review[5] %}
+                            <div class="review">
+                            <h2>{{review[2]}}</h2>
+                            <p>{{review[3]}}</p>
+                            <p>{{review[5]}}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            {% else %}
+                <div class="no-review">
+                <h3>There are no reviews to display.</h2>
+                </div>
+            {% endif %}
+        </div>
     </div>
-
-
 </body>
 </html>
