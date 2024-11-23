@@ -22,9 +22,14 @@
             </div>
         </div>
     </nav>
-    
+
     <main>
         <div class="hero-section">
+            
+            {% if isSignedIn %}
+            <h2>You're signed in!</h2>
+            {% endif %}
+
             <h1>Welcome to Game Review!</h1>
             <p>Your go-to platform for honest game reviews and ratings.</p>
             <div class="cta-buttons">
