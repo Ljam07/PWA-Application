@@ -118,13 +118,25 @@ def RatingSelect(game_id):
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM Games WHERE game_id = ?", game_id)
-    data = cursor.fetchone()
+    game_data = cursor.fetchone()
 
-    if data == None:
+    if game_data == None:
         flash("No game could be found.")
         return Rating()
     
-    title = data[1]
+    cursor.execute("SELECT * FROM Reviews WHERE game_id = ?", game_id)
+    review_data = cursor.fetchall()
+
+    if review_data:
+        sum_rating = 0
+        rating_count = 0
+        for rows in review_data:
+            sum_rating += rows[4]
+            rating_count += 1
+
+        average_rating = sum_rating / rating_count
+    else:
+        average_rating = 0
 
     #This needs to be replaced
     """
@@ -137,7 +149,8 @@ def RatingSelect(game_id):
     """
 
     db.close()
-    return render_template("rating_select.html", title=title, isSignedIn=g_isSignedIn)
+    return render_template("rating_select.html", game_data=game_data, isSignedIn=g_isSignedIn, 
+                           review_data=review_data, average_rating=average_rating)
 
 
 app.run(debug=True, port=5000)

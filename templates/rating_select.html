@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Shared.css">
-    <title>{{title}}</title>
+    <link rel="stylesheet" href="../static/css/Games.css">
+    <title>{{game_data[1]}}</title>
 </head>
 <body>
     <nav>
@@ -23,15 +24,39 @@
         </div>
     </nav>
 
+    <!--
     {% with messages = get_flashed_messages() %}
-            {% if messages %}
+        {% if messages %}
+            <div class="message-container">
                 <ul>
                     {% for message in messages %}
                         <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
-            {% endif %}
+            </div>
+        {% endif %}
     {% endwith %}
+        -->
+
+    <div class="game-container">
+        <div class="game-header">
+            <h1>{{ game_data[1] }}</h1>
+            <p class="game-description">{{ game_data[2] }}</p>
+        </div>
+        <div class="game-content">
+            <img src="../static/images/{{ game_data[3] }}" alt="{{ game_data[1] }}" class="game-image">
+            <div class="game-details">
+                <p class="release-date"><strong>Released on:</strong> {{ game_data[4] }}</p>
+                <p><strong>Developer:</strong> {{ game_data[5] }}</p>
+                <p><strong>Publisher:</strong> {{ game_data[6] }}</p>
+                {% if average_rating != 0 %}
+                <p><strong>Average rating:</strong> {{ average_rating }}</p>
+                {% else %}
+                <p><strong>Average rating:</strong> Unrated </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 
 </body>
