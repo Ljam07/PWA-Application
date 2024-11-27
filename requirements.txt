@@ -1,1 +1,1 @@
-flask
+flask Flask-WTF Flask-SQLAlchemy
