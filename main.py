@@ -1,13 +1,31 @@
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request,\
+flash, redirect, session, url_for, make_response, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
-import uuid
+from werkzeug.utils import secure_filename
+import uuid # Custom secret key <- note as custom technique
 import sqlite3
 from datetime import datetime
+import os
 
+#########################
+##########SETUP##########
+#########################
 app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex
 
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() \
+        in ALLOWED_EXTENSIONS
+
+#########################
+#######Functions#########
+#########################
 @app.route("/")
 def Home():
     session['isSignedIn'] = session.get('isSignedIn', False)
@@ -18,7 +36,7 @@ def Home():
 def Logout():
     session.clear()
     flash("You have been logged out.")
-    return redirect("/login")
+    return redirect(url_for("/login"))
 
 
 @app.route("/login", methods=("GET", "POST"))
@@ -93,7 +111,7 @@ def Signup():
 @app.route("/rating", methods=("GET", "POST"))
 def Rating():
     if not session.get('isSignedIn', False):
-        flash("You must log in to use the rating system.")
+        flash("You must logged in to use the rating system.")
         return redirect("/login")
 
     db = sqlite3.connect("database/games.db")
@@ -110,12 +128,14 @@ def Rating():
 @app.route("/rating/<game_id>", methods=("GET", "POST"))
 def RatingSelect(game_id):
     if not session.get('isSignedIn', False):
-        flash("You must log in to use the rating system.")
-        return redirect("/login")
+        flash("You must be logged in to use the rating system.")
+        return redirect(url_for("Login"))
 
     db = sqlite3.connect("database/games.db")
     try:
         cursor = db.cursor()
+
+        # Fetch game data
         cursor.execute("SELECT * FROM Games WHERE game_id = ?", (game_id,))
         game_data = cursor.fetchone()
 
@@ -128,15 +148,15 @@ def RatingSelect(game_id):
 
         # Calculate average rating
         if review_data:
-            sum_rating = sum(row[4] for row in review_data) 
+            sum_rating = sum(row[4] for row in review_data)
             average_rating = round(sum_rating / len(review_data), 1)
         else:
             average_rating = 0
 
-        # Check if user already reviewed
+        # Check if user has already reviewed
         cursor.execute(
             "SELECT * FROM Reviews WHERE game_id = ? AND reviewer_name = ?",
-            (game_id, session['username'])
+            (game_id, session.get('username', ''))
         )
         existing_review = cursor.fetchone()
 
@@ -144,10 +164,9 @@ def RatingSelect(game_id):
 
         if request.method == "POST":
             if "remove_review" in request.form:
-                # Remove the user's review
                 cursor.execute(
                     "DELETE FROM Reviews WHERE game_id = ? AND reviewer_name = ?",
-                    (game_id, session['username'])
+                    (game_id, session.get('username', ''))
                 )
                 db.commit()
                 flash("Your review has been removed.")
@@ -155,17 +174,23 @@ def RatingSelect(game_id):
 
             elif "add_review" in request.form:
                 # Add a new review
-                rating = int(request.form["rating"])
-                review_text = request.form["review_text"]
-                review_date = datetime.now().strftime("%Y-%m-%d")
+                try:
+                    rating = int(request.form["rating"])
+                    review_text = request.form["review_text"]
+                    review_date = datetime.now().strftime("%Y-%m-%d")
 
-                cursor.execute(
-                    "INSERT INTO Reviews (game_id, reviewer_name, review_date, rating, review_text) VALUES (?, ?, ?, ?, ?)",
-                    (game_id, session['username'], review_date, rating, review_text)
-                )
-                db.commit()
-                flash("Your review has been added.")
-                return redirect(f"/rating/{game_id}")
+                    cursor.execute(
+                        "INSERT INTO Reviews (game_id, reviewer_name, review_date, rating, review_text) VALUES (?, ?, ?, ?, ?)",
+                        (game_id, session.get('username', ''), review_date, rating, review_text)
+                    )
+                    db.commit()
+                    flash("Your review has been added.")
+                    return redirect(f"/rating/{game_id}")
+                except ValueError:
+                    flash("Invalid rating value. Please try again.")
+    except sqlite3.Error as e:
+        flash(f"Database error: {e}")
+        return redirect("/rating")
     finally:
         db.close()
 
@@ -177,6 +202,71 @@ def RatingSelect(game_id):
         average_rating=average_rating,
         hasReviewed=hasReviewed
     )
+
+
+@app.route("/upload", methods=['GET', 'POST'])
+def Upload():
+    print("Upload")
+    if not session.get('isSignedIn', False):
+        flash("You must log in to upload content.")
+        return redirect(url_for('Login'))
+
+    if request.method == 'POST':
+        print("POST")        
+        if 'image' not in request.files:
+            flash("No image uploaded", 'error')
+            return redirect(url_for('Rating'))
+
+        file = request.files['image']
+        if file.filename == '':
+            flash("No image selected", 'error')
+            return redirect(url_for('Rating'))
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(f"UPLOAD_{datetime.now().timestamp()}_{file.filename}")
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            
+            title = request.form['title']
+
+            #Check for title existing
+            try:
+                db = sqlite3.connect("database/games.db")
+                cursor = db.cursor()
+                cursor.execute("SELECT * FROM Games WHERE title = ?", (title,))
+                existing_game = cursor.fetchone()
+
+            except Exception as e:
+                print(f"When connecting to db: \n{e}")
+            try:
+                # Check if the game title already exists
+
+                if existing_game:
+                    flash("A game with this title already exists.", 'error')
+                    return redirect(url_for('Upload'))
+
+                # Proceed with the insertion if no duplicate title
+                cursor.execute('''
+                    INSERT INTO Games (title, description, image_path, release_date, developer, publisher)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (
+                    title,
+                    request.form['description'],
+                    f"../uploads/{filename}",
+                    request.form['release_date'],
+                    request.form['developer'],
+                    request.form['publisher']
+                ))
+                db.commit()
+                flash("Entry added successfully!", 'success')
+            except Exception as e:
+                flash(f"Database error: {e}", 'error')
+            finally:
+                db.close()
+        else:
+            flash("Invalid file type", 'error')
+
+    return render_template("upload.html")
 
 
 if __name__ == "__main__":
