@@ -1,5 +1,7 @@
 .rating-container {
     padding: 20px;
+    margin-top: 60px; /* Ensure it clears the navbar height */
+    box-sizing: border-box;
 }
 
 .games-grid {
@@ -7,6 +9,7 @@
     flex-wrap: wrap; /* Allow wrapping of cards on smaller screens */
     gap: 20px; /* Space between cards */
     justify-content: space-evenly; /* Even space between cards */
+    margin-top: 20px;
 }
 
 .game-card {
@@ -44,14 +47,20 @@
     color: #ccc;
 }
 
-/* Responsive layout */
+/* Responsive layout for small screens */
 @media (max-width: 600px) {
+    .rating-container {
+        margin-top: 80px; /* Adjust margin to account for navbar on smaller screens */
+        padding: 10px; /* Reduce padding for better fit */
+    }
+
     .games-grid {
         justify-content: center; /* Center cards on small screens */
     }
 
     .game-card {
         width: 100%; /* Make cards full width on smaller screens */
+        /* TODO: work on this */
     }
 }
 

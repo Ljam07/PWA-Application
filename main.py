@@ -36,7 +36,7 @@ def Home():
 def Logout():
     session.clear()
     flash("You have been logged out.")
-    return redirect(url_for("/login"))
+    return redirect("/login")
 
 
 @app.route("/login", methods=("GET", "POST"))
@@ -213,6 +213,20 @@ def Upload():
 
     if request.method == 'POST':
         print("POST")        
+        title = request.form['title']
+        #Check for title existing
+        try:
+            db = sqlite3.connect("database/games.db")
+            cursor = db.cursor()
+            cursor.execute("SELECT * FROM Games WHERE title = ?", (title,))
+            existing_game = cursor.fetchone()
+            if existing_game:
+                flash("A game with this title already exists.", 'error')
+                return redirect(url_for('Upload'))
+        except Exception as e:
+            print(f"When connecting to db: \n{e}")
+            # Check if the game title already exists
+
         if 'image' not in request.files:
             flash("No image uploaded", 'error')
             return redirect(url_for('Rating'))
@@ -227,24 +241,9 @@ def Upload():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             
-            title = request.form['title']
 
-            #Check for title existing
+
             try:
-                db = sqlite3.connect("database/games.db")
-                cursor = db.cursor()
-                cursor.execute("SELECT * FROM Games WHERE title = ?", (title,))
-                existing_game = cursor.fetchone()
-
-            except Exception as e:
-                print(f"When connecting to db: \n{e}")
-            try:
-                # Check if the game title already exists
-
-                if existing_game:
-                    flash("A game with this title already exists.", 'error')
-                    return redirect(url_for('Upload'))
-
                 # Proceed with the insertion if no duplicate title
                 cursor.execute('''
                     INSERT INTO Games (title, description, image_path, release_date, developer, publisher)
@@ -268,6 +267,29 @@ def Upload():
 
     return render_template("upload.html")
 
+# Define the route for offline functionality 
+@app.route('/offline') 
+def offline(): 
+    response = make_response(render_template('offline.html')) 
+    return response 
+ 
+# Define the route for the service worker 
+@app.route('/service-worker.js') 
+def sw(): 
+    response = make_response( 
+        send_from_directory(os.path.join(app.root_path, 'static/js'), 
+'service-worker.js') 
+    ) 
+    return response 
+ 
+# Define the route for the manifest.json file 
+@app.route('/manifest.json') 
+def manifest(): 
+    response = make_response( 
+        send_from_directory(os.path.join(app.root_path, 'static'), 
+'manifest.json') 
+    ) 
+    return response 
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

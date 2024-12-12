@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/Shared.css">
+    <link rel="stylesheet" href="../static/css/Upload.css">
+    <script src="../static/js/offline.js"></script>
     <title>Upload Game</title>
 </head>
 <body>
@@ -47,6 +49,16 @@
             </div>
             <button type="submit">Add Game</button>
         </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+    {% endwith %}
     </div>
 </body>
 </html>

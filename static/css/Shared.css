@@ -94,7 +94,7 @@ main {
   text-decoration: none;
   padding: 12px 25px;
   font-size: 1rem;
-  border-radius: 50px; /* Rounded button edges */
+  border-radius: 50px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
@@ -108,7 +108,6 @@ main {
   transform: translateY(0); /* Returns to original position when clicked */
 }
 
-/* Footer */
 footer {
   background-color: rgb(50, 60, 90);
   text-align: center;
