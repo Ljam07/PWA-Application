@@ -110,9 +110,9 @@ def Signup():
 
 @app.route("/rating", methods=("GET", "POST"))
 def Rating():
-    if not session.get('isSignedIn', False):
-        flash("You must logged in to use the rating system.")
-        return redirect("/login")
+    # if not session.get('isSignedIn', False):
+    #     flash("You must logged in to use the rating system.")
+    #     return redirect("/login")
 
     db = sqlite3.connect("database/games.db")
     try:
@@ -122,15 +122,10 @@ def Rating():
     finally:
         db.close()
 
-    return render_template("rating.html", games=games, isSignedIn=session.get('isSignedIn', False))
-
+    return render_template("rating.html", games=games, isSignedIn=session.get('isSignedIn'))
 
 @app.route("/rating/<game_id>", methods=("GET", "POST"))
 def RatingSelect(game_id):
-    if not session.get('isSignedIn', False):
-        flash("You must be logged in to use the rating system.")
-        return redirect(url_for("Login"))
-
     db = sqlite3.connect("database/games.db")
     try:
         cursor = db.cursor()
@@ -143,7 +138,25 @@ def RatingSelect(game_id):
             flash("No game could be found.")
             return redirect("/rating")
 
-        cursor.execute("SELECT * FROM Reviews WHERE game_id = ?", (game_id,))
+        # Handle sorting option
+        sort_order = request.args.get('sort_order', 'newest')
+
+        if sort_order == 'highest':
+            cursor.execute(
+                "SELECT * FROM Reviews WHERE game_id = ? ORDER BY rating DESC, review_date DESC",
+                (game_id,)
+            )
+        elif sort_order == 'lowest':
+            cursor.execute(
+                "SELECT * FROM Reviews WHERE game_id = ? ORDER BY rating ASC, review_date DESC",
+                (game_id,)
+            )
+        else:  # Default is 'newest'
+            cursor.execute(
+                "SELECT * FROM Reviews WHERE game_id = ? ORDER BY review_date DESC",
+                (game_id,)
+            )
+
         review_data = cursor.fetchall()
 
         # Calculate average rating
@@ -173,7 +186,6 @@ def RatingSelect(game_id):
                 return redirect(f"/rating/{game_id}")
 
             elif "add_review" in request.form:
-                # Add a new review
                 try:
                     rating = int(request.form["rating"])
                     review_text = request.form["review_text"]
@@ -200,8 +212,10 @@ def RatingSelect(game_id):
         isSignedIn=session.get('isSignedIn', False),
         review_data=review_data,
         average_rating=average_rating,
-        hasReviewed=hasReviewed
+        hasReviewed=hasReviewed,
+        sort_order=sort_order
     )
+
 
 
 @app.route("/upload", methods=['GET', 'POST'])

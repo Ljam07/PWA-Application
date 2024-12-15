@@ -20,7 +20,7 @@ form label {
   text-align: left; /* Align labels to the left */
 }
 
-form input[type="text"], form input[type="password"], form input[type="submit"] {
+form input[type="text"], form input[type="password"], form input[type="submit"], form input[type="email"] {
   width: 100%;
   padding: 0.8rem;
   margin-top: 0.5rem;
@@ -28,14 +28,14 @@ form input[type="text"], form input[type="password"], form input[type="submit"] 
   border-radius: 4px;
 }
 
-form input[type="text"], form input[type="password"] {
+form input[type="text"], form input[type="password"], form input[type="email"] {
   background-color: rgb(60, 70, 100);
   color: white;
   border: 1px solid rgb(80, 90, 120);
   box-sizing: border-box;
 }
 
-form input[type="text"], form input[type="password"]:focus {
+form input[type="text"], form input[type="password"]:focus, form input[type="email"] {
   outline: none;
   border-color: rgb(130, 140, 180);
 }

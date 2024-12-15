@@ -51,28 +51,32 @@
         </div>
     
         <div class="add-review">
-            {% if not hasReviewed %}
-                <h1>Add Your Review</h1>
-                <form class="review-form" method="POST" action="">    
-                    <!-- Rating Input -->
-                    <select name="rating" required>
-                        <option value="" disabled selected>Select a Rating</option>
-                        {% for i in range(1, 11) %}
-                            <option value="{{ i }}">{{ i }}</option>
-                        {% endfor %}
-                    </select>
-                
-                    <!-- Review Text -->
-                    <textarea name="review_text" placeholder="Write your review (Max. 500 characters)... " rows="4" maxlength="500"></textarea>    
+            {% if isSignedIn %}
+                {% if not hasReviewed %}
+                    <h1>Add Your Review</h1>
+                    <form class="review-form" method="POST" action="">    
+                        <!-- Rating Input -->
+                        <select name="rating" required>
+                            <option value="" disabled selected>Select a Rating</option>
+                            {% for i in range(1, 11) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
                     
-                    <!-- Submit Button -->
-                    <button type="submit" name="add_review" class="submit-btn">Submit Review</button>
-                </form>
+                        <!-- Review Text -->
+                        <textarea name="review_text" placeholder="Write your review (Max. 500 characters)... " rows="4" maxlength="500"></textarea>    
+
+                        <!-- Submit Button -->
+                        <button type="submit" name="add_review" class="submit-btn">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p>You have already submitted a review for this game.</p>
+                    <form method="POST" action="">
+                        <button type="submit" name="remove_review" class="submit-btn">Remove Review</button>
+                    </form> 
+                {% endif %}
             {% else %}
-                <p>You have already submitted a review for this game.</p>
-                <form method="POST" action="">
-                    <button type="submit" name="remove_review" class="submit-btn">Remove Review</button>
-                </form> 
+                <p>You must be logged in to review.</p>
             {% endif %}
         </div>
         
@@ -81,12 +85,22 @@
         <div class="rating-container">
             <div class="rating-header">
                 <h1><strong>Reviews for {{game_data[1]}}</strong></h1><br>
+
+                <!-- Dropdown for Sorting -->
+                <form method="GET" action="">
+                    <label for="sort_order">Sort By:</label>
+                    <select name="sort_order" id="sort_order" onchange="this.form.submit()">
+                        <option value="newest" {% if sort_order == 'newest' %}selected{% endif %}>Newest</option>
+                        <option value="highest" {% if sort_order == 'highest' %}selected{% endif %}>Highest Rating</option>
+                        <option value="lowest" {% if sort_order == 'lowest' %}selected{% endif %}>Lowest Rating</option>
+                    </select>
+                </form>
             </div>
             {% if review_data %}
                     {% for review in review_data %}
                         {% if review[5] %}
                             <div class="review">
-                            <h2>{{review[2]}}</h2>
+                            <h2>{{review[2]}} - {{review[4]}} stars</h2>
                             <p>{{review[3]}}</p>
                             <p>{{review[5]}}</p>
                             </div>
