@@ -267,29 +267,26 @@ def Upload():
 
     return render_template("upload.html")
 
-# Define the route for offline functionality 
-@app.route('/offline') 
-def offline(): 
-    response = make_response(render_template('offline.html')) 
-    return response 
+@app.route('/offline')
+def offline():
+    response = make_response(render_template('offline.html'))
+    return response
  
-# Define the route for the service worker 
-@app.route('/service-worker.js') 
-def sw(): 
-    response = make_response( 
-        send_from_directory(os.path.join(app.root_path, 'static/js'), 
-'service-worker.js') 
-    ) 
-    return response 
+@app.route('/service-worker.js')
+def sw():
+    response = make_response(
+        send_from_directory(os.path.join(app.root_path, 'static/js'),
+        'service-worker.js')
+    )
+    return response
  
-# Define the route for the manifest.json file 
-@app.route('/manifest.json') 
-def manifest(): 
-    response = make_response( 
-        send_from_directory(os.path.join(app.root_path, 'static'), 
-'manifest.json') 
-    ) 
-    return response 
+@app.route('/manifest.json')
+def manifest():
+    response = make_response(
+        send_from_directory(os.path.join(app.root_path, 'static'), 'manifest.json')
+    )
+    return response
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
